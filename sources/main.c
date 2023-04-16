@@ -6,7 +6,7 @@
 /*   By: cschmied <cschmied@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:32:57 by cschmied          #+#    #+#             */
-/*   Updated: 2023/04/16 18:07:42 by cschmied         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:16:51 by cschmied         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **env)
 	zero_structs(&cmds, &fds);
 	if (argc != 5)
 		return (ft_printf("Usage: ./pipex infile cmd1 cmd2 outfile\n"), 1);
-	if (fds_init(&fds, argv) == -1 || cmds_init(argv, env, &cmds) == -1)
+	if (fds_init(&fds, argv) == -1 || cmds_init(argv, env, &fds, &cmds) == -1)
 		return (try_cleanup(&fds, &cmds), 1);
 	if (execute_cmd1(&pids, &fds, &cmds, env) == -1)
 		return (try_cleanup(&fds, &cmds), 1);
@@ -55,12 +55,7 @@ int	execute_cmd2(t_pids *pids, t_filedes *fds, t_cmds *cmds, char **env)
 int	execute_cmd1(t_pids *pids, t_filedes *fds, t_cmds *cmds, char **env)
 {
 	if (!cmds->cmd1_path)
-	{
-		if (close_safe(fds->infile) == -1
-			|| close_safe(fds->pipe[1]) == -1)
-			return (-1);
 		return (0);
-	}
 	pids->pid_cmd1 = fork_safe(cmds, fds);
 	if (pids->pid_cmd1 == -1)
 		return (-1);

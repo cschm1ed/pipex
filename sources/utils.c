@@ -6,7 +6,7 @@
 /*   By: cschmied <cschmied@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 18:00:18 by cschmied          #+#    #+#             */
-/*   Updated: 2023/04/16 17:57:54 by cschmied         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:17:50 by cschmied         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**get_paths(char **env)
 	return (paths);
 }
 
-char	*command_path(char *cmd, char **paths)
+char	*command_path(t_filedes *fds, t_cmds *cmds, char *cmd, char **paths)
 {
 	int		i;
 	char	*tmp;
@@ -49,7 +49,11 @@ char	*command_path(char *cmd, char **paths)
 	{
 		tmp = ft_strjoin(paths[i], cmd);
 		if (!tmp)
-			return (perror("malloc"), NULL);
+		{
+			perror("malloc");
+			try_cleanup(fds, cmds);
+			exit(1);
+		}
 		if (access(tmp, F_OK | X_OK) != -1)
 			return (tmp);
 		free(tmp);
@@ -58,7 +62,7 @@ char	*command_path(char *cmd, char **paths)
 	return (ft_printf("pipex: %s: command not found\n", cmd), NULL);
 }
 
-int	cmds_init(char **argv, char **env, t_cmds *cmds)
+int	cmds_init(char **argv, char **env, t_filedes *fds, t_cmds *cmds)
 {
 	cmds->paths = get_paths(env);
 	if (!cmds->paths)
@@ -66,13 +70,11 @@ int	cmds_init(char **argv, char **env, t_cmds *cmds)
 	cmds->cmd1 = ft_split(argv[2], " \t\r\f\v");
 	if (!cmds->cmd1)
 		return (free_cmds(cmds), -1);
-	cmds->cmd1_path = command_path(cmds->cmd1[0], cmds->paths);
-	if (!cmds->cmd1_path)
-		return (free_cmds(cmds), -1);
+	cmds->cmd1_path = command_path(fds, cmds, cmds->cmd1[0], cmds->paths);
 	cmds->cmd2 = ft_split(argv[3], " \t\r\f\v");
 	if (!cmds->cmd2)
 		return (free_cmds(cmds), -1);
-	cmds->cmd2_path = command_path(cmds->cmd2[0], cmds->paths);
+	cmds->cmd2_path = command_path(fds, cmds, cmds->cmd2[0], cmds->paths);
 	if (!cmds->cmd2_path)
 		return (free_cmds(cmds), -1);
 	return (0);
@@ -86,7 +88,8 @@ int	fds_init(t_filedes *fds, char **argv)
 	if (fds->outfile == -1)
 		return (close_fds(fds), perror("open"), 1);
 	if (access(argv[1], F_OK) == -1)
-		return (ft_printf("pipex: %s: No such file or directory\n", argv[1]), -1);
+		return (ft_printf("pipex: %s: No such file or directory\n",
+				argv[1]), -1);
 	if (access(argv[1], R_OK) == -1)
 		return (ft_printf("pipex: %s: permission denied\n"), -1);
 	fds->infile = open(argv[1], O_RDONLY);

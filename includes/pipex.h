@@ -6,7 +6,7 @@
 /*   By: cschmied <cschmied@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:14:45 by cschmied          #+#    #+#             */
-/*   Updated: 2023/04/16 17:59:14 by cschmied         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:14:19 by cschmied         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int		fork_safe(t_cmds *cmds, t_filedes *fds);
 
 // utils
 int		fds_init(t_filedes *fds, char **argv);
-int		cmds_init(char **argv, char **env, t_cmds *cmds);
+int		cmds_init(char **argv, char **env, t_filedes *fds, t_cmds *cmds);
 char	**get_paths(char **env);
-char	*command_path(char *cmd, char **paths);
+char	*command_path(t_filedes *fds, t_cmds *cmds, char *cmd, char **paths);
 
 void	zero_structs(t_cmds *cmds, t_filedes *fds);
 void	free_str_array(char ***array);
