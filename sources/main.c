@@ -6,7 +6,7 @@
 /*   By: cschmied <cschmied@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 17:32:57 by cschmied          #+#    #+#             */
-/*   Updated: 2023/04/16 18:16:51 by cschmied         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:24:05 by cschmied         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	main(int argc, char **argv, char **env)
 	t_filedes	fds;
 	t_cmds		cmds;
 	t_pids		pids;
-	int			status;
+	int			status1;
+	int			status2;
 
 	zero_structs(&cmds, &fds);
 	if (argc != 5)
@@ -29,9 +30,11 @@ int	main(int argc, char **argv, char **env)
 	if (execute_cmd2(&pids, &fds, &cmds, env) == -1)
 		return (try_cleanup(&fds, &cmds), 1);
 	try_cleanup(&fds, &cmds);
-	waitpid(pids.pid_cmd1, &status, 0);
-	waitpid(pids.pid_cmd2, &status, 0);
-	return (status >> 8);
+	waitpid(pids.pid_cmd1, &status1, 0);
+	waitpid(pids.pid_cmd2, &status2, 0);
+	if (status1 >> 8 && !(status2 >> 8))
+		return (status1 >> 8);
+	return (status2 >> 8);
 }
 
 int	execute_cmd2(t_pids *pids, t_filedes *fds, t_cmds *cmds, char **env)
