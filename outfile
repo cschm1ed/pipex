@@ -1,0 +1,15 @@
+total 168
+drwxr-xr-x  14 cschmied  staff    448 16 Apr 18:07 .
+drwx------@ 20 cschmied  staff    640 16 Apr 17:51 ..
+drwxr-xr-x  12 cschmied  staff    384 16 Apr 17:57 .git
+-rw-r--r--   1 cschmied  staff   1764 16 Apr 17:51 Makefile
+-rw-r--r--   1 cschmied  staff   6064 16 Apr 18:03 frees.o
+drwxr-xr-x   3 cschmied  staff     96 16 Apr 17:51 includes
+-rw-r--r--   1 cschmied  staff     12 16 Apr 18:03 infile
+drwxr-xr-x  92 cschmied  staff   2944 16 Apr 18:03 libft
+-rw-r--r--   1 cschmied  staff   7944 16 Apr 18:07 main.o
+-rw-r--r--   1 cschmied  staff      0 16 Apr 18:07 outfile
+-rwxr-xr-x   1 cschmied  staff  37410 16 Apr 18:07 pipex
+drwxr-xr-x   6 cschmied  staff    192 16 Apr 17:51 sources
+-rw-r--r--   1 cschmied  staff   8528 16 Apr 18:03 utils.o
+-rw-r--r--   1 cschmied  staff   4976 16 Apr 18:03 wrappers.o
